@@ -27,6 +27,8 @@ const config = {
 
 	// The test environment that will be used for testing
 	testEnvironment: "jsdom",
+
+	//setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };
 
 module.exports = createJestConfig(config);
