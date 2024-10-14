@@ -15,7 +15,7 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { doCredentialSignin } from "./action";
+import { doCredentialSignin, doSocialLogin } from "./action";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -46,7 +46,7 @@ const LoginPage = () => {
 
 				//if there is an error, throw an error
 				if (!user) {
-					throw new Error("Invalid user or user does not exist");
+					throw new Error("Incorrect email or password");
 				}
 
 				toaster.toast({
@@ -67,8 +67,6 @@ const LoginPage = () => {
 			}
 		});
 	};
-
-	const handleSocialLogin = async () => {};
 
 	return (
 		<>
@@ -137,12 +135,12 @@ const LoginPage = () => {
 					<span className="mx-4 text-sm text-gray-500">OR CONTINUE WITH</span>
 					<div className="flex-grow h-px bg-gray-300" />
 				</div>
-				<form action={handleSocialLogin}>
+				<form action={doSocialLogin}>
 					<Button
 						variant="outline"
 						className="flex items-center justify-center w-full mb-4"
 						type="submit"
-						value="credentials"
+						value="google"
 						name="action"
 						isLoading={isPending}
 						loadingText="Verifying account">
