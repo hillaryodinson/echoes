@@ -1,10 +1,75 @@
-import React from "react";
+"use client";
+import React, { useTransition } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { JSX, SVGProps } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginSchema } from "@/schemas/user.schema";
+import { LoginType } from "@/types";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+} from "@/components/ui/form";
+import { doCredentialSignin } from "./action";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 const LoginPage = () => {
+	const router = useRouter();
+	const toaster = useToast();
+	const [isPending, startTransition] = useTransition();
+	const form = useForm<LoginType>({
+		resolver: zodResolver(LoginSchema),
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+	});
+
+	const handleCredentialLogin = ({ email, password }: LoginType) => {
+		startTransition(async () => {
+			try {
+				//validate the user information to make sure its ok
+				const validated = LoginSchema.safeParse({ email, password });
+
+				if (validated.error) {
+					throw new Error(validated.error.message);
+				}
+
+				//try to login the user.
+				const user = await doCredentialSignin(validated.data);
+
+				//if there is an error, throw an error
+				if (!user) {
+					throw new Error("Invalid user or user does not exist");
+				}
+
+				toaster.toast({
+					title: "Success",
+					description: "Login was successful. redirecting...",
+					variant: "Success",
+				});
+
+				//if no error, redirect to the dashboard
+				router.push("/dashboard");
+			} catch (error: Error | unknown) {
+				toaster.toast({
+					title: "Error",
+					description:
+						error instanceof Error ? error?.message : "Something went wrong",
+					variant: "destructive",
+				});
+			}
+		});
+	};
+
+	const handleSocialLogin = async () => {};
+
 	return (
 		<>
 			<div className="text-right">
@@ -17,26 +82,78 @@ const LoginPage = () => {
 			</div>
 			<div className="mt-12">
 				<h2 className="text-3xl font-bold mb-4">Sign in to your account</h2>
-				<p className="text-gray-600 mb-8">Enter your email below</p>
-				<Input placeholder="name@example.com" className="mb-4" />
-				<Button className="bg-[#bd1e59] text-white w-full mb-4">
-					Sign In with Email
-				</Button>
-				<div className="flex items-center mb-4">
+
+				<Form {...form}>
+					<form
+						onSubmit={form.handleSubmit(handleCredentialLogin)}
+						className="space-y-4">
+						<FormField
+							name="email"
+							control={form.control}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Email</FormLabel>
+									<FormControl>
+										<Input
+											placeholder="name@example.com"
+											{...field}
+											className="mb-4"
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+						<FormField
+							name="password"
+							control={form.control}
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Password</FormLabel>
+									<FormControl>
+										<Input
+											type="password"
+											placeholder="********"
+											{...field}
+											className="mb-4"
+										/>
+									</FormControl>
+								</FormItem>
+							)}
+						/>
+
+						<Button
+							className="bg-[#bd1e59] text-white w-full mb-4"
+							type="submit"
+							value="credentials"
+							name="action"
+							isLoading={isPending}
+							loadingText="Signing In">
+							Sign In with Email
+						</Button>
+					</form>
+				</Form>
+				<div className="flex items-center my-4">
 					<div className="flex-grow h-px bg-gray-300" />
 					<span className="mx-4 text-sm text-gray-500">OR CONTINUE WITH</span>
 					<div className="flex-grow h-px bg-gray-300" />
 				</div>
-				<Button
-					variant="outline"
-					className="flex items-center justify-center w-full mb-4">
-					<ChromeIcon className="text-gray-600 h-5 w-5 mr-2" />
-					Google
-				</Button>
-				<p className="text-xs text-gray-500 mt-4">
-					By clicking continue, you agree to our Terms of Service and Privacy
-					Policy.
-				</p>
+				<form action={handleSocialLogin}>
+					<Button
+						variant="outline"
+						className="flex items-center justify-center w-full mb-4"
+						type="submit"
+						value="credentials"
+						name="action"
+						isLoading={isPending}
+						loadingText="Verifying account">
+						<ChromeIcon className="text-gray-600 h-5 w-5 mr-2" />
+						Google
+					</Button>
+					<p className="text-xs text-gray-500 mt-4">
+						By clicking continue, you agree to our Terms of Service and Privacy
+						Policy.
+					</p>
+				</form>
 			</div>
 		</>
 	);
