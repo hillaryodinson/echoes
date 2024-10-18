@@ -3,7 +3,7 @@ import { JSX, SVGProps } from "react";
 export default function Component({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="min-h-screen flex">
-			<div className="w-1/2 bg-black text-white p-12 flex flex-col justify-between">
+			<div className="hidden md:w-1/2 bg-black text-white p-12 md:flex flex-col justify-between">
 				<div>
 					<FlagIcon className="text-white h-6 w-6" />
 					<h1 className="text-4xl font-bold mt-2">Acme Inc</h1>
@@ -17,7 +17,7 @@ export default function Component({ children }: { children: React.ReactNode }) {
 					<p className="text-lg font-semibold mt-4">Sofia Davis</p>
 				</div>
 			</div>
-			<div className="w-1/2 bg-white p-12 flex flex-col justify-center">
+			<div className="w-full md:w-1/2 bg-white p-12 flex flex-col justify-center">
 				{children}
 			</div>
 		</div>

@@ -34,15 +34,8 @@ const LoginPage = () => {
 	const handleCredentialLogin = ({ email, password }: LoginType) => {
 		startTransition(async () => {
 			try {
-				//validate the user information to make sure its ok
-				const validated = LoginSchema.safeParse({ email, password });
-
-				if (validated.error) {
-					throw new Error(validated.error.message);
-				}
-
 				//try to login the user.
-				const user = await doCredentialSignin(validated.data);
+				const user = await doCredentialSignin({ email, password });
 
 				//if there is an error, throw an error
 				if (!user) {
@@ -52,7 +45,7 @@ const LoginPage = () => {
 				toaster.toast({
 					title: "Success",
 					description: "Login was successful. redirecting...",
-					variant: "Success",
+					variant: "success",
 				});
 
 				//if no error, redirect to the dashboard
