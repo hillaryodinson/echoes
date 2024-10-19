@@ -94,6 +94,7 @@ const SignupPage = () => {
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(handleSignup)}
+						method="post"
 						className="space-y-4">
 						<FormField
 							control={form.control}
