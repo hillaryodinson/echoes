@@ -10,6 +10,7 @@ import * as argon from "argon2";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	...AuthConfig,
+
 	providers: [
 		CredentialsProvider({
 			credentials: {

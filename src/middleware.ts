@@ -9,6 +9,7 @@ import {
 
 const { auth } = NextAuth(AuthConfig);
 
+// export { auth as middleware } from "@/server/auth";
 export default auth((req) => {
 	const { nextUrl } = req;
 
