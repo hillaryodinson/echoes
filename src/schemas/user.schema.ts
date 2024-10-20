@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+import validator from "validator";
 /**
  * Schema for login
  */
@@ -30,4 +30,26 @@ export const RegisterSchema = LoginSchema.extend({
 			path: ["confirmPassword"],
 		});
 	}
+});
+
+export const NOKSchema = z.object({
+	name: z.string().min(1, { message: "Name is required" }),
+	email: z
+		.string()
+		.email({ message: "Invalid email" })
+		.min(1, { message: "Email is required" }),
+	altEmail: z
+		.string()
+		.email({ message: "Invalid email" })
+		.min(1, { message: "Email is required" })
+		.optional(),
+	phone: z
+		.string()
+		.min(1, { message: "Phone is required" })
+		.refine(validator.isMobilePhone),
+	altPhone: z
+		.string()
+		.min(1, { message: "Phone is required" })
+		.refine(validator.isMobilePhone)
+		.optional(),
 });

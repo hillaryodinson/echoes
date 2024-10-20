@@ -1,14 +1,15 @@
 import { redirect } from "next/navigation";
 import getSession from "@/lib/getSession";
-import CreateMessageView from "./create-message-view";
 
-const CreateMessagePage = async () => {
+import CreateNokView from "./create-nok-view";
+
+const CreateNokPage = async () => {
 	const user = await getSession();
 	if (!user) {
 		redirect("/login?callbackUrl=/messages/create");
 	}
 
-	return <CreateMessageView />;
+	return <CreateNokView />;
 };
 
-export default CreateMessagePage;
+export default CreateNokPage;

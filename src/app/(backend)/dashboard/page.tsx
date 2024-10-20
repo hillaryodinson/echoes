@@ -1,9 +1,11 @@
-import { auth } from "@/server/auth";
 import React from "react";
-import { logout } from "./action";
+import getSession from "@/lib/getSession";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const DashboardPage = async () => {
-	const session = await auth();
+	const session = await getSession();
 	const username = session?.user?.name;
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
@@ -18,15 +20,20 @@ const DashboardPage = async () => {
 						Welcome {username}
 					</h1>
 					<p className="mt-4 text-muted-foreground">
-						The page you&apos;re looking for doesn&apos;t seem to exist.
-						Let&apos;s get you back on track.
+						Its your first time with us lets help you get settled in. Let&apos;s
+						set up your account.
 					</p>
 					<div className="mt-6">
-						<form action={logout}>
-							<button className="inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-								Log Out
-							</button>
-						</form>
+						<Link
+							href="/nok/create"
+							className={cn(
+								buttonVariants({
+									size: "sm",
+								}),
+								"inline-flex items-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+							)}>
+							Get Started
+						</Link>
 					</div>
 				</div>
 			</div>

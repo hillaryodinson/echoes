@@ -25,11 +25,11 @@ export default function Error({
 					className="mx-auto"
 					style={{ aspectRatio: "200/200", objectFit: "cover" }}
 				/>
-				<h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+				<code className="mt-4 text-xs font-light tracking-tight text-foreground">
 					{error.message}
-				</h1>
+				</code>
 				<p className="mt-4 text-muted-foreground">
-					The page you&apos;re looking for doesn&apos;t seem to exist.
+					Oops this is embarrasing. You are not supposed to see this. <br />
 					Let&apos;s get you back on track.
 				</p>
 				<div className="mt-6">
