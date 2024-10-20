@@ -14,11 +14,48 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import RequiredIndicator from "@/components/custom/generic/required-indicator";
+import { useMutation } from "@tanstack/react-query";
+import { createNok } from "./action";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function CreateNokView() {
+	const toaster = useToast();
+	const [isPending, startTransition] = React.useTransition();
 	const form = useForm<NokType>({
 		resolver: zodResolver(NOKSchema),
+		defaultValues: {
+			name: "",
+			phone: "",
+			email: "",
+			altEmail: "",
+			altPhone: "",
+		},
 	});
+
+	const createMutation = useMutation({
+		mutationFn: createNok,
+		onSuccess: () => {
+			toaster.toast({
+				title: "Success",
+				description: "Registration was successful. Please login to continue.",
+				variant: "success",
+			});
+		},
+		onError(error) {
+			toaster.toast({
+				title: "Error",
+				description: error.message,
+				variant: "destructive",
+			});
+		},
+	});
+
+	const handleCreateNok = (data: NokType) => {
+		startTransition(async () => {
+			createMutation.mutate(data);
+		});
+	};
+
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0 items-center">
 			<div className="p-4 border-blue-500 border rounded-md w-full md:w-2/3">
@@ -35,7 +72,8 @@ export default function CreateNokView() {
 			</div>
 			<Form {...form}>
 				<form
-					onSubmit={form.handleSubmit(() => {})}
+					method="post"
+					onSubmit={form.handleSubmit(handleCreateNok)}
 					className="w-full md:w-2/3 border rounded-md shadow-sm space-y-4 md:p-8 p-4 py-8 mt-8">
 					<FormField
 						name="name"
@@ -81,7 +119,7 @@ export default function CreateNokView() {
 										Alternative Email
 									</FormLabel>
 									<FormControl>
-										<Input {...field} />
+										<Input {...field} type="email" />
 									</FormControl>
 								</FormItem>
 							)}
@@ -97,11 +135,7 @@ export default function CreateNokView() {
 										<RequiredIndicator />
 									</FormLabel>
 									<FormControl>
-										<Input
-											{...field}
-											type="email"
-											className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
-										/>
+										<Input type="tel" {...field} />
 									</FormControl>
 								</FormItem>
 							)}
@@ -114,13 +148,18 @@ export default function CreateNokView() {
 										Alternative Phone No.
 									</FormLabel>
 									<FormControl>
-										<Input {...field} />
+										<Input {...field} type="tel" />
 									</FormControl>
 								</FormItem>
 							)}
 						/>
 					</div>
-					<Button type="submit">Submit</Button>
+					<Button
+						type="submit"
+						isLoading={isPending}
+						loadingText="Creating next of kin...">
+						Submit
+					</Button>
 				</form>
 			</Form>
 		</div>
