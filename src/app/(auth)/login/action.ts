@@ -4,11 +4,11 @@ import { User } from "@prisma/client";
 
 export async function doSocialLogin(formData: FormData) {
 	const provider = formData.get("action") as string;
-	await signIn(provider, { redirectTo: "/admin", redirect: true });
+	await signIn(provider, { redirectTo: "/dashboard", redirect: true });
 }
 
 export const doLogout = async () => {
-	await signOut({ redirectTo: "/" });
+	await signOut({ redirectTo: "/", redirect: true });
 };
 
 export const doCredentialSignin = async (credentials: {
