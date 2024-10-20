@@ -34,7 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
 					//compare password to ensure its user
 					const passwordValidate = await argon.verify(
-						user.password,
+						user.password!,
 						password as string
 					);
 					//if password dont match throw invalid user error

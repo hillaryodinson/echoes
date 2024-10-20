@@ -2,16 +2,14 @@
 
 import * as React from "react";
 import {
-	AudioWaveform,
 	BookOpen,
 	Bot,
-	Command,
 	Frame,
 	GalleryVerticalEnd,
+	Home,
 	Map,
 	PieChart,
 	Settings2,
-	SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -39,35 +37,29 @@ const data = {
 			logo: GalleryVerticalEnd,
 			plan: "Enterprise",
 		},
-		{
-			name: "Acme Corp.",
-			logo: AudioWaveform,
-			plan: "Startup",
-		},
-		{
-			name: "Evil Corp.",
-			logo: Command,
-			plan: "Free",
-		},
 	],
 	navMain: [
 		{
-			title: "Playground",
+			title: "Quickstart",
 			url: "#",
-			icon: SquareTerminal,
+			icon: Home,
 			isActive: true,
 			items: [
 				{
-					title: "History",
-					url: "#",
+					title: "Dashboard",
+					url: "/dashboard",
 				},
 				{
-					title: "Starred",
-					url: "#",
+					title: "Create Message",
+					url: "/messages/create",
 				},
 				{
-					title: "Settings",
-					url: "#",
+					title: "Recipients",
+					url: "/recipients",
+				},
+				{
+					title: "Scheduled",
+					url: "/messages/scheduled",
 				},
 			],
 		},
