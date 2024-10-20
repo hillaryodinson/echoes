@@ -17,9 +17,11 @@ import RequiredIndicator from "@/components/custom/generic/required-indicator";
 import { useMutation } from "@tanstack/react-query";
 import { createNok } from "./action";
 import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function CreateNokView() {
 	const toaster = useToast();
+	const router = useRouter();
 	const [isPending, startTransition] = React.useTransition();
 	const form = useForm<NokType>({
 		resolver: zodResolver(NOKSchema),
@@ -37,9 +39,11 @@ export default function CreateNokView() {
 		onSuccess: () => {
 			toaster.toast({
 				title: "Success",
-				description: "Registration was successful. Please login to continue.",
+				description: "Nice you successfully added your next of kin.",
 				variant: "success",
 			});
+
+			router.push("/dashboard");
 		},
 		onError(error) {
 			toaster.toast({

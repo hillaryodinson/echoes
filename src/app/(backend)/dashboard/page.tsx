@@ -3,9 +3,15 @@ import getSession from "@/lib/getSession";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { redirect } from "next/navigation";
 
 const DashboardPage = async () => {
 	const session = await getSession();
+
+	if (!session?.user) {
+		redirect("/login?callbackUrl=");
+	}
+
 	const username = session?.user?.name;
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0">

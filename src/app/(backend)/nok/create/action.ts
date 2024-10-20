@@ -4,13 +4,14 @@ import { db } from "@/config/db";
 import { NOKSchema } from "@/schemas/user.schema";
 import { auth } from "@/server/auth";
 import { NokType } from "@/types";
+import { redirect } from "next/navigation";
 
 export const createNok = async (data: NokType) => {
 	const session = await auth();
 
 	console.log(session?.user);
 	if (!session || !session?.user) {
-		throw new Error("Unauthorized");
+		redirect("/login");
 	}
 
 	const isValid = NOKSchema.safeParse(data);
