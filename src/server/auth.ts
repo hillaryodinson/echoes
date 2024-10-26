@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@/config/db";
 import { Adapter } from "next-auth/adapters";
 import { User } from "@prisma/client";
-import * as argon from "argon2";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	...AuthConfig,
@@ -33,7 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					}
 
 					//compare password to ensure its user
-					const passwordValidate = await argon.verify(
+					const passwordValidate = await bcrypt.compare(
 						user.password!,
 						password as string
 					);

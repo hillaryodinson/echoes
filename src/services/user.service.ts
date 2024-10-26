@@ -1,7 +1,7 @@
 import { db } from "@/config/db";
+import { hashPassword } from "@/lib/hasher";
 import { RegistrationType } from "@/types";
 import { User } from "@prisma/client";
-import * as argon from "argon2";
 
 export const createUser = async (
 	data: RegistrationType
@@ -21,7 +21,7 @@ export const createUser = async (
 	}
 
 	//if no user exist create the user
-	const hashedPassword = await argon.hash(password);
+	const hashedPassword = await hashPassword(password);
 
 	return await db.user.create({
 		data: {
