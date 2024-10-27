@@ -53,3 +53,10 @@ export const NOKSchema = z.object({
 		.refine(validator.isMobilePhone)
 		.optional(),
 });
+
+export const PhoneSchema = z.object({
+	phone: z
+		.string()
+		.min(1, { message: "Phone is required" })
+		.refine(validator.isMobilePhone),
+});

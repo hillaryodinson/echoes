@@ -44,11 +44,15 @@ const SignupPage = () => {
 					throw new Error("User data is invalid: " + isValid.error.message);
 				}
 
-				await doSignup(isValid.data);
+				const user = await doSignup(isValid.data);
 
 				//send an email notification to the user
 				//TBD: activation email or just welcome email
 				//redirect the user to the login page
+				if (!user) {
+					throw Error("Something went wrong. Please try again");
+				}
+
 				toaster.toast({
 					title: "Success",
 					description: "Registration was successful. Please login to continue.",

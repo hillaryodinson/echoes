@@ -356,14 +356,14 @@ export const template = (subject: string, component: string) => {
               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                 <tr>
                   <td class="content-block">
-                  //TODO: Update with your company Address
+                  <!--- //TODO: Update with your company Address -->
                     <span class="apple-link">Company Inc, 7-11 Commercial Ct, Belfast BT1 2NB</span>
                     <br> Don't like these emails? <a href="#">Unsubscribe</a>.
                   </td>
                 </tr>
                 <tr>
                   <td class="content-block powered-by">
-                  //TODO: Update with your company name
+                  <!--- //TODO: Update with your company name -->
                     Powered by <a href="#">HTMLemail.io</a>
                   </td>
                 </tr>

@@ -13,5 +13,7 @@ export const doSignup = async (data: RegistrationType) => {
 	}
 
 	const response = await createUser(data);
+	//TODO: Send account verification email to User
+
 	return response;
 };

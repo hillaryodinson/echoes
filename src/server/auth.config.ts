@@ -6,6 +6,7 @@ export const AuthConfig = {
 	},
 	callbacks: {
 		authorized({ auth }) {
+			console.log("IS USER LOGGEDN IN?", auth?.user);
 			const isAuthenticated = !!auth?.user;
 
 			return isAuthenticated;

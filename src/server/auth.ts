@@ -73,11 +73,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	],
 	adapter: PrismaAdapter(db) as Adapter,
 	callbacks: {
-		// jwt({ token,  }) {
-		// 	console.log(token, "USER: ", user);
-		// },
-		// session({ session, user, token }) {
-		// 	console.log(session, user, token);
-		// },
+		jwt({ token }) {
+			// console.log(token, "USER: ", user);
+			return token;
+		},
+		async session({ session }) {
+			const account = await db.user.findUnique({
+				where: { email: session?.user?.email },
+			});
+			session.user.setupStage = account?.setupState as number;
+			session.user.usid = account?.id as string;
+			return session;
+		},
 	},
 });
