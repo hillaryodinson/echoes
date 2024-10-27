@@ -17,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				email: { label: "Email", type: "email" },
 				password: { label: "Password", type: "password" },
 			},
+
 			async authorize(credentials): Promise<User | null> {
 				try {
 					if (!credentials?.email || !credentials?.password) {
