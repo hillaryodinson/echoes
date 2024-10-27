@@ -1,4 +1,5 @@
 "use server";
+import { sendMail } from "@/lib/mailer";
 import { signIn, signOut } from "@/server/auth";
 import { User } from "@prisma/client";
 
@@ -20,6 +21,13 @@ export const doCredentialSignin = async (credentials: {
 			...credentials,
 			redirect: false,
 		});
+
+		const message = `<p>Dear ${response?.user?.name},</p><p>you have successfully logged in. </p>`;
+		await sendMail(
+			response?.user?.email as string,
+			"Login Successful",
+			message
+		);
 
 		return response;
 	} catch (error) {
