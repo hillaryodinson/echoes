@@ -26,7 +26,7 @@ export const sendMail = async (
 		console.log("Message was sent: ", info.response);
 		return true;
 	} catch (error) {
-		console.log("Message was sent: ", error);
+		console.log("Message was not sent: ", error);
 		return false;
 	}
 };
