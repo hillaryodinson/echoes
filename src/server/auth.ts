@@ -7,6 +7,7 @@ import { db } from "@/config/db";
 import { Adapter } from "next-auth/adapters";
 import { User } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { sendMail, template } from "@/lib/mailer";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	...AuthConfig,
@@ -34,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					}
 
 					//compare password to ensure its user
-					const passwordValidate = await bcrypt.compare(
+					const passwordValidate = bcrypt.compareSync(
 						password as string,
 						user.password!
 					);
@@ -42,6 +43,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 					if (!passwordValidate) {
 						throw new Error("Invalid password");
 					}
+
+					//send notification email to user
+					const subject = "Login Successful";
+					const message = template(
+						subject,
+						`<p>Dear ${user?.name},</p><p>you have successfully logged in. </p>`
+					);
+					await sendMail(user?.email as string, subject, message);
 
 					return user;
 				} catch (error) {
