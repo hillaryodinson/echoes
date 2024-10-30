@@ -76,3 +76,7 @@ export const PhoneSchema = z.object({
 		.min(1, { message: "Phone is required" })
 		.refine(validator.isMobilePhone),
 });
+
+export const OtpSchema = z.object({
+	otp: z.string().min(6, { message: "OTP is required" }).max(6),
+});

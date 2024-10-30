@@ -1,6 +1,7 @@
 "use server";
 import { PhoneSchema } from "@/schemas/user.schema";
 import { auth } from "@/server/auth";
+import { sendOTP } from "@/services/sms.service";
 import { updateUser } from "@/services/user.service";
 import { ActionResponse, PhoneType } from "@/types";
 import { User } from "@prisma/client";
@@ -14,20 +15,24 @@ export const updatePhoneNumber = async (
 			throw Error("Unauthorized access");
 		}
 
-		const { userId, setupStage } = session?.user;
+		const { usid, setupStage } = session?.user;
 
 		const isValid = PhoneSchema.safeParse(data);
 		if (isValid.error) {
 			throw new Error(isValid.error.message);
 		}
 
-		const updated = await updateUser(userId, {
+		const updated = await updateUser(usid, {
 			...data,
 			setupState: setupStage + 1,
 		});
 		if (!updated) {
 			throw new Error("Phone number was not updated try again");
 		}
+
+		console.log("User Id:", usid);
+		//send otp to the user
+		await sendOTP(usid);
 
 		return {
 			success: true,

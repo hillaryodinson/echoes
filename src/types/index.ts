@@ -1,6 +1,7 @@
 import {
 	LoginSchema,
 	NOKSchema,
+	OtpSchema,
 	PhoneSchema,
 	ProfileSchema,
 	RegisterSchema,
@@ -12,6 +13,7 @@ export type RegistrationType = z.infer<typeof RegisterSchema>;
 export type UpdateProfileType = z.infer<typeof ProfileSchema>;
 export type NokType = z.infer<typeof NOKSchema>;
 export type PhoneType = z.infer<typeof PhoneSchema>;
+export type OtpType = z.infer<typeof OtpSchema>;
 
 export const setupStages: Record<number, string> = {
 	1: "phone_no_setup",

@@ -4,6 +4,7 @@ import { redirect, useSearchParams } from "next/navigation";
 import { setupStages } from "@/types";
 import { getKey } from "@/lib/utils";
 import PhoneOnboardingPage from "./phone-onboarding-form";
+import PhoneVerificationForm from "./phone-verification-form";
 
 const GettingStartedComponent = () => {
 	const search = useSearchParams();
@@ -16,6 +17,8 @@ const GettingStartedComponent = () => {
 
 	if (stage === 1) {
 		return <PhoneOnboardingPage currentStage={stage} />;
+	} else if (stage === 2) {
+		return <PhoneVerificationForm currentStage={stage} />;
 	}
 };
 

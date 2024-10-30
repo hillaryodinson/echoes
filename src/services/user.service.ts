@@ -103,3 +103,35 @@ export const updateUser = async (
 		return null;
 	}
 };
+
+export const updateOTPByUserId = async (id: string, data: object) => {
+	return await db.user.update({
+		where: {
+			id,
+		},
+		data,
+	});
+};
+
+export const updateOTPByUserIdAndOTP = async (
+	id: string,
+	otp: string,
+	data: object
+) => {
+	return await db.user.update({
+		where: {
+			id,
+			phoneOTP: otp,
+		},
+		data,
+	});
+};
+
+export const findUserWithIdAndOTP = async (id: string, otp: string) => {
+	return await db.user.findFirst({
+		where: {
+			id,
+			phoneOTP: otp,
+		},
+	});
+};
