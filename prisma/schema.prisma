@@ -54,6 +54,7 @@ model User {
   accounts       Account[]
   sessions       Session[]
   noks           Nok[]
+  phone          String?
   setupState     Int           @default(1)
   WillExecutor   WillExecutor? @relation(fields: [willExecutorId], references: [id])
   willExecutorId String?

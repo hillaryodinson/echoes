@@ -4,6 +4,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { redirect } from "next/navigation";
+import { setupStages } from "@/types";
 
 const DashboardPage = async () => {
 	const session = await getSession();
@@ -13,6 +14,9 @@ const DashboardPage = async () => {
 	}
 
 	const username = session?.user?.name;
+	const currentStage = session?.user.setupStage;
+	const currentStageName = setupStages[currentStage];
+
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
 			<div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -23,7 +27,7 @@ const DashboardPage = async () => {
 			<div className="min-h-[100vh] flex-1 rounded-xl md:min-h-min">
 				<div className="mx-auto max-w-md text-center">
 					<h1 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-						Welcome {username}
+						Welcome {username} ({currentStageName})
 					</h1>
 					<p className="mt-4 text-muted-foreground">
 						Its your first time with us lets help you get settled in. Let&apos;s
@@ -31,7 +35,7 @@ const DashboardPage = async () => {
 					</p>
 					<div className="mt-6">
 						<Link
-							href="/nok/create"
+							href={`/onboarding?stage=${currentStageName.toLowerCase()}`}
 							className={cn(
 								buttonVariants({
 									size: "sm",

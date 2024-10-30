@@ -78,11 +78,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 			return token;
 		},
 		async session({ session }) {
-			const account = await db.user.findUnique({
-				where: { email: session?.user?.email },
-			});
-			session.user.setupStage = account?.setupState as number;
-			session.user.usid = account?.id as string;
+			if (!session.user.setupStage) {
+				const account = await db.user.findUnique({
+					where: { email: session?.user?.email },
+				});
+				session.user.setupStage = account?.setupState as number;
+				session.user.usid = account?.id as string;
+			}
+			console.log(session);
 			return session;
 		},
 	},
