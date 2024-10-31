@@ -68,10 +68,9 @@ const PhoneVerificationForm = ({ currentStage }: { currentStage: number }) => {
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0 items-center">
 			<div className="p-4 border-blue-500 border rounded-md w-full md:w-2/3">
 				<p className="text-xs tracking-tight text-left italic">
-					Lets get your phone number, we will use this to remind you to validate
-					you are alive. If we dont get feedback after 5 attempts we will
-					initiate transition protocol. You know contact your next of kin and
-					begin the wealth transfer
+					We just sent you an SMS with a verification code. Enter it below to
+					confirm your phone number. If you dont receive the SMS, try disabling
+					your DND and then request for a new token.
 				</p>
 			</div>
 			<Form {...form}>

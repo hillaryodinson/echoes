@@ -5,6 +5,7 @@ import { setupStages } from "@/types";
 import { getKey } from "@/lib/utils";
 import PhoneOnboardingPage from "./phone-onboarding-form";
 import PhoneVerificationForm from "./phone-verification-form";
+import NokOnboardingForm from "./nok-onboarding-form";
 
 const GettingStartedComponent = () => {
 	const search = useSearchParams();
@@ -19,6 +20,8 @@ const GettingStartedComponent = () => {
 		return <PhoneOnboardingPage currentStage={stage} />;
 	} else if (stage === 2) {
 		return <PhoneVerificationForm currentStage={stage} />;
+	} else if (stage === 3) {
+		return <NokOnboardingForm currentStage={stage} />;
 	}
 };
 
