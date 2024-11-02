@@ -17,7 +17,7 @@ import RequiredIndicator from "@/components/custom/generic/required-indicator";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { createNok } from "../nok/create/action";
+import { createNokOnboarding } from "./nok-onboarding";
 
 export default function NokOnboardingForm({
 	currentStage,
@@ -39,7 +39,7 @@ export default function NokOnboardingForm({
 	});
 
 	const createMutation = useMutation({
-		mutationFn: createNok,
+		mutationFn: createNokOnboarding,
 		onSuccess: () => {
 			toaster.toast({
 				title: "Success",
@@ -167,7 +167,7 @@ export default function NokOnboardingForm({
 						type="submit"
 						isLoading={isPending}
 						loadingText="Creating next of kin...">
-						Add Next of Kin
+						Add next of Kin
 					</Button>
 				</form>
 			</Form>

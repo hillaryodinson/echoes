@@ -6,7 +6,7 @@ import { auth } from "@/server/auth";
 import { NokType } from "@/types";
 import { redirect } from "next/navigation";
 
-export const createNok = async (data: NokType) => {
+export const createNokOnboarding = async (data: NokType) => {
 	const session = await auth();
 
 	console.log(session?.user);
@@ -29,6 +29,15 @@ export const createNok = async (data: NokType) => {
 	if (!user) {
 		throw new Error("User dont exist");
 	}
+
+	await db.user.update({
+		where: {
+			id: user.id,
+		},
+		data: {
+			setupState: user.setupState + 1,
+		},
+	});
 
 	return await db.nok.create({
 		data: {
