@@ -96,3 +96,11 @@ model WillExecutor {
 
   @@map("will_executors")
 }
+
+model Vault {
+  id       String  @id @default(cuid())
+  name     String
+  password String?
+
+  @@map("vaults")
+}

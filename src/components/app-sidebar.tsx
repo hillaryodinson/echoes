@@ -64,21 +64,17 @@ const data = {
 			],
 		},
 		{
-			title: "Models",
+			title: "My Vaults",
 			url: "#",
 			icon: Bot,
 			items: [
 				{
-					title: "Genesis",
-					url: "#",
+					title: "New Vault",
+					url: "/vaults/create",
 				},
 				{
-					title: "Explorer",
-					url: "#",
-				},
-				{
-					title: "Quantum",
-					url: "#",
+					title: "View Vaults",
+					url: "/vaults",
 				},
 			],
 		},

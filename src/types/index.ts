@@ -14,6 +14,7 @@ export type UpdateProfileType = z.infer<typeof ProfileSchema>;
 export type NokType = z.infer<typeof NOKSchema>;
 export type PhoneType = z.infer<typeof PhoneSchema>;
 export type OtpType = z.infer<typeof OtpSchema>;
+export type VaultType = z.infer<typeof VaultSchema>;
 
 export const setupStages: Record<number, string> = {
 	1: "phone_no_setup",
