@@ -20,8 +20,7 @@ export const setupStages: Record<number, string> = {
 	2: "phone_verification",
 	3: "nok_setup",
 	4: "will_executor_setup",
-	5: "executor_setup",
-	6: "walkthrough",
+	5: "walkthrough",
 	0: "completed",
 };
 

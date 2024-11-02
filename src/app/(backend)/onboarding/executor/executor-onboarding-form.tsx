@@ -17,9 +17,9 @@ import RequiredIndicator from "@/components/custom/generic/required-indicator";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { createNokOnboarding } from "./nok-onboarding";
+import { createExecutorOnboarding } from "./action";
 
-export default function NokOnboardingForm({
+export default function ExecutorOnboardingForm({
 	currentStage,
 }: {
 	currentStage: number;
@@ -39,11 +39,11 @@ export default function NokOnboardingForm({
 	});
 
 	const createMutation = useMutation({
-		mutationFn: createNokOnboarding,
+		mutationFn: createExecutorOnboarding,
 		onSuccess: () => {
 			toaster.toast({
 				title: "Success",
-				description: "Nice you successfully added your next of kin.",
+				description: "Nice you successfully added your will executor.",
 				variant: "success",
 			});
 
@@ -68,15 +68,10 @@ export default function NokOnboardingForm({
 	return (
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0 items-center">
 			<div className="p-4 border-blue-500 border rounded-md w-full md:w-2/3">
-				{/* <p className="text-xs tracking-tight text-left">
-					Add information of your next of kin who you intend to transfer these
-					information to when its time
-				</p> */}
 				<p className="text-xs tracking-normal text-left">
-					First, You need to designate someone you trust as your next of kin.
-					All information will be transfer this person easily will be accessible
-					to them when needed. This simple step can provide peace of mind for
-					both you and your loved ones.
+					First, You need to designate someone you trust as your executor of
+					your will. Specific notification will be transfer to this person when
+					needed.
 				</p>
 			</div>
 			<Form {...form}>
@@ -89,7 +84,7 @@ export default function NokOnboardingForm({
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="font-bold text-xs">
-									Next of Kin Name
+									Name
 									<RequiredIndicator />
 								</FormLabel>
 								<FormControl>
@@ -167,7 +162,7 @@ export default function NokOnboardingForm({
 						type="submit"
 						isLoading={isPending}
 						loadingText="Creating next of kin...">
-						Add next of Kin
+						Add Will Executor
 					</Button>
 				</form>
 			</Form>

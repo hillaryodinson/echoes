@@ -19,7 +19,7 @@ import { OtpType, setupStages } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { verifyOTP } from "./phone-verification";
+import { verifyOTP } from "./action";
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

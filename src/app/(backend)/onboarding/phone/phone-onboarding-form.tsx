@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Phone } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
-import { updatePhoneNumber } from "./phone-onboarding";
+import { updatePhoneNumber } from "./action";
 import {
 	Form,
 	FormControl,
