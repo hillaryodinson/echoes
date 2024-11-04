@@ -6,6 +6,7 @@ import {
 	ProfileSchema,
 	RegisterSchema,
 } from "@/schemas/user.schema";
+import { VaultSchema } from "@/schemas/vault.schema";
 import { z } from "zod";
 
 export type LoginType = z.infer<typeof LoginSchema>;

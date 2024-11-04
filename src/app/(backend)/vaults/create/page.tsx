@@ -2,10 +2,11 @@
 import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NOKSchema } from "@/schemas/user.schema";
-import { NokType } from "@/types";
+import { NokType, VaultType } from "@/types";
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -18,32 +19,37 @@ import { useMutation } from "@tanstack/react-query";
 import { createVault } from "./action";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
+import { VaultSchema } from "@/schemas/vault.schema";
+import { Switch } from "@/components/ui/switch";
 
 export default function CreateNokView() {
 	const toaster = useToast();
 	const router = useRouter();
+	const [isChecked, setIsChecked] = React.useState(false);
 	const [isPending, startTransition] = React.useTransition();
-	const form = useForm<NokType>({
-		resolver: zodResolver(NOKSchema),
+	const form = useForm<VaultType>({
+		resolver: zodResolver(VaultSchema),
 		defaultValues: {
-			name: "",
-			phone: "",
-			email: "",
-			altEmail: "",
-			altPhone: "",
+			name: "Personal Vault",
+			password: "",
 		},
 	});
 
+	const handleEmptyPassword = () => {
+		setIsChecked(!isChecked);
+		form.setValue("password", "");
+	};
+
 	const createMutation = useMutation({
 		mutationFn: createVault,
-		onSuccess: () => {
+		onSuccess: (data) => {
 			toaster.toast({
 				title: "Success",
-				description: "Nice you successfully added your next of kin.",
+				description: "Vault was added successfully",
 				variant: "success",
 			});
 
-			router.push("/dashboard");
+			router.push(`/vaults/${data.id}`);
 		},
 		onError(error) {
 			toaster.toast({
@@ -54,7 +60,7 @@ export default function CreateNokView() {
 		},
 	});
 
-	const handleCreateWillExecutor = (data: NokType) => {
+	const handleCreateVault = (data: VaultType) => {
 		startTransition(async () => {
 			createMutation.mutate(data);
 		});
@@ -64,22 +70,20 @@ export default function CreateNokView() {
 		<div className="flex flex-1 flex-col gap-4 p-4 pt-0 items-center">
 			<div className="p-4 border-blue-500 border rounded-md w-full md:w-2/3">
 				<p className="text-xs tracking-normal text-left">
-					First, You need to designate someone you trust as your executor of
-					your will. Specific notification will be transfer to this person when
-					needed.
+					Create a vault that would store your records and documents.
 				</p>
 			</div>
 			<Form {...form}>
 				<form
 					method="post"
-					onSubmit={form.handleSubmit(handleCreateWillExecutor)}
+					onSubmit={form.handleSubmit(handleCreateVault)}
 					className="w-full md:w-2/3 border rounded-md shadow-sm space-y-4 md:p-8 p-4 py-8 mt-8">
 					<FormField
 						name="name"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel className="font-bold text-xs">
-									Next of Kin Name
+									Vault Name
 									<RequiredIndicator />
 								</FormLabel>
 								<FormControl>
@@ -91,68 +95,44 @@ export default function CreateNokView() {
 							</FormItem>
 						)}
 					/>
-					<div className="grid md:grid-cols-2 gap-4">
+					<div>
+						<FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+							<div className="space-y-0.5">
+								<FormDescription>
+									Would you like to add a password to protect this vault?
+									<br />
+									Only your designated next of kin will be able to access it
+									after your passing.
+								</FormDescription>
+							</div>
+							<FormControl>
+								<Switch
+									checked={isChecked}
+									onCheckedChange={handleEmptyPassword}
+								/>
+							</FormControl>
+						</FormItem>
+					</div>
+					{isChecked && (
 						<FormField
-							name="email"
+							name="password"
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel className="font-bold text-xs">
-										Email
+										Password
 										<RequiredIndicator />
 									</FormLabel>
 									<FormControl>
 										<Input
+											type="password"
 											{...field}
-											type="email"
 											className="px-4 appearance-none outline-none text-gray-800 w-full bg-transparent"
 										/>
 									</FormControl>
 								</FormItem>
 							)}
 						/>
-						<FormField
-							name="altEmail"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="font-bold text-xs">
-										Alternative Email
-									</FormLabel>
-									<FormControl>
-										<Input {...field} type="email" />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</div>
-					<div className="grid md:grid-cols-2 gap-4">
-						<FormField
-							name="phone"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="font-bold text-xs">
-										Phone No.
-										<RequiredIndicator />
-									</FormLabel>
-									<FormControl>
-										<Input type="tel" {...field} />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-						<FormField
-							name="altPhone"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel className="font-bold text-xs">
-										Alternative Phone No.
-									</FormLabel>
-									<FormControl>
-										<Input {...field} type="tel" />
-									</FormControl>
-								</FormItem>
-							)}
-						/>
-					</div>
+					)}
 					<Button
 						type="submit"
 						isLoading={isPending}

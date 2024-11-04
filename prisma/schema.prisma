@@ -59,6 +59,7 @@ model User {
   setupState     Int           @default(1)
   WillExecutor   WillExecutor? @relation(fields: [willExecutorId], references: [id])
   willExecutorId String?
+  Vault          Vault[]
 
   @@map("users")
 }
@@ -101,6 +102,8 @@ model Vault {
   id       String  @id @default(cuid())
   name     String
   password String?
+  owner    User    @relation(fields: [ownerId], references: [id])
+  ownerId  String
 
   @@map("vaults")
 }
