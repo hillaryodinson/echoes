@@ -1,13 +1,9 @@
 "use server";
-
 import { db } from "@/config/db";
-import { NOKSchema } from "@/schemas/user.schema";
-import { VaultSchema } from "@/schemas/vault.schema";
+import { hashPassword } from "@/lib/hasher";
 import { auth } from "@/server/auth";
 import { VaultType } from "@/types";
 import { redirect } from "next/navigation";
-import bcrypt from "bcryptjs";
-import { hashPassword } from "@/lib/hasher";
 
 export const createVault = async (data: VaultType) => {
 	const session = await auth();
@@ -16,12 +12,6 @@ export const createVault = async (data: VaultType) => {
 	console.log(session?.user);
 	if (!session || !session?.user) {
 		redirect("/login");
-	}
-
-	const isValid = VaultSchema.safeParse(data);
-
-	if (isValid.error) {
-		throw new Error(isValid.error.message);
 	}
 
 	const count = await db.vault.count({

@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import RequiredIndicator from "@/components/custom/generic/required-indicator";
 import { useMutation } from "@tanstack/react-query";
-import { createVault } from "./action";
+import { createVaultAction } from "../action";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { VaultSchema } from "@/schemas/vault.schema";
@@ -41,7 +41,7 @@ export default function CreateNokView() {
 	};
 
 	const createMutation = useMutation({
-		mutationFn: createVault,
+		mutationFn: createVaultAction,
 		onSuccess: (data) => {
 			toaster.toast({
 				title: "Success",

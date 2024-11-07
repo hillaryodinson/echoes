@@ -35,7 +35,7 @@ const DashboardPage = async () => {
 					</p>
 					<div className="mt-6">
 						<Link
-							href={`/onboarding?stage=${currentStageName.toLowerCase()}`}
+							href={`/onboarding?stage=${currentStageName?.toLowerCase()}`}
 							className={cn(
 								buttonVariants({
 									size: "sm",

@@ -99,11 +99,30 @@ model WillExecutor {
 }
 
 model Vault {
-  id       String  @id @default(cuid())
-  name     String
-  password String?
-  owner    User    @relation(fields: [ownerId], references: [id])
-  ownerId  String
+  id         String       @id @default(cuid())
+  name       String
+  password   String?
+  owner      User         @relation(fields: [ownerId], references: [id])
+  ownerId    String
+  VaultItems VaultItems[]
+
+  createdAt DateTime @default(now())
+  modified  DateTime @updatedAt
 
   @@map("vaults")
+}
+
+model VaultItems {
+  id        String   @id @default(cuid())
+  name      String
+  type      String?
+  password  String?
+  path      String
+  size      String
+  vault     Vault    @relation(fields: [vaultId], references: [id])
+  createdAt DateTime @default(now())
+  modified  DateTime @updatedAt
+  vaultId   String
+
+  @@map("vault_items")
 }

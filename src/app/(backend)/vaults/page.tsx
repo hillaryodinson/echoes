@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
 	Table,
@@ -21,35 +21,32 @@ import {
 	Plus,
 	ChevronDown,
 } from "lucide-react";
-
-// Sample data for demonstration
-const allItems = Array(5)
-	.fill(null)
-	.map((_, index) => ({
-		id: index + 1,
-		name: `Vault ${index + 1}`,
-		type: "folder",
-		size: "--",
-		modified: new Date(
-			Date.now() - Math.floor(Math.random() * 10000000000)
-		).toLocaleDateString(),
-	}));
+import { useQuery } from "@tanstack/react-query";
+import { fetchVaultsAction } from "./action";
+import Link from "next/link";
+import GridViewFolderLayout from "@/components/custom/generic/repo-grid-folder-view";
+import Loader from "@/components/custom/generic/loader";
 
 export default function Component() {
 	const [isGridView, setIsGridView] = useState(true);
 	const [columnCount, setColumnCount] = useState(5);
 	const [currentPage, setCurrentPage] = useState(1);
+	const { data, isFetching } = useQuery({
+		queryKey: ["vaults"],
+		queryFn: async () => await fetchVaultsAction(),
+	});
+
 	const itemsPerPage = 20;
-	const totalPages = Math.ceil(allItems.length / itemsPerPage);
+	const totalPages = Math.ceil((data ?? []).length / itemsPerPage);
+	console.log(data, "TOTAL PAGES");
 
 	const startIndex = (currentPage - 1) * itemsPerPage;
 	const endIndex = startIndex + itemsPerPage;
-	const currentItems = allItems.slice(startIndex, endIndex);
+	const currentItems = data?.slice(startIndex, endIndex);
 
 	const nextPage = () =>
 		setCurrentPage((prev) => Math.min(prev + 1, totalPages));
 	const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
-	const addColumn = () => setColumnCount((prev) => Math.min(prev + 1, 6));
 
 	return (
 		<Card className="border bg-muted/50">
@@ -71,41 +68,40 @@ export default function Component() {
 									<LayoutGrid className="h-4 w-4" />
 								)}
 							</Button>
-							{isGridView && (
-								<Button
-									variant="outline"
-									size="icon"
-									onClick={addColumn}
-									disabled={columnCount >= 6}
-									aria-label="Add column">
-									<Plus className="h-4 w-4" />
-								</Button>
-							)}
+
+							<Link
+								href="/vaults/create"
+								className={buttonVariants({
+									variant: "outline",
+									size: "icon",
+								})}
+								aria-label="Add column">
+								<Plus className="h-4 w-4" />
+							</Link>
 						</div>
 					</div>
 					{isGridView ? (
-						<div
-							className={`grid gap-4 mt-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-${columnCount}`}>
-							{currentItems.map((item) => (
-								<Card key={item.id}>
-									<CardContent className="flex flex-col items-center p-4">
-										{item.type === "folder" ? (
-											<Folder className="h-8 w-8 mb-2 text-blue-500" />
-										) : (
-											<File className="h-8 w-8 mb-2 text-gray-500" />
-										)}
-										<div className="text-center">
-											<h2 className="text-xs font-semibold truncate">
-												{item.name}
-											</h2>
-											<p className="text-sm text-gray-500 capitalize">
-												{item.type}
-											</p>
-										</div>
-									</CardContent>
-								</Card>
-							))}
-						</div>
+						isFetching ? (
+							<div className="p-4 sm:p-6 md:p-8">
+								<div className="flex items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+									<div className="flex flex-col items-center space-y-4 text-gray-500">
+										<Loader
+											className="w-4 h-4 bg-blue-500"
+											aria-hidden="true"
+										/>
+										<span className="text-sm font-medium" aria-live="polite">
+											Getting vaults
+										</span>
+									</div>
+								</div>
+							</div>
+						) : (
+							<GridViewFolderLayout
+								currentItems={currentItems}
+								columnCount={columnCount}
+								emptyText="No vaults yet. Create one to get started"
+							/>
+						)
 					) : (
 						<div className="mt-4 overflow-x-auto">
 							<Table>
@@ -130,26 +126,20 @@ export default function Component() {
 									</TableRow>
 								</TableHeader>
 								<TableBody className="border">
-									{currentItems.map((item) => (
+									{currentItems?.map((item) => (
 										<TableRow key={item.id}>
 											<TableCell className="py-2">
-												{item.type === "folder" ? (
-													<Folder className="h-5 w-5 text-blue-500" />
-												) : (
-													<File className="h-5 w-5 text-gray-500" />
-												)}
+												{<Folder className="h-5 w-5 text-blue-500" />}
 											</TableCell>
 											<TableCell className="py-2 text-sm">
 												{item.name}
 											</TableCell>
-											<TableCell className="py-2 text-sm">
-												{item.type}
-											</TableCell>
+											<TableCell className="py-2 text-sm">vault</TableCell>
 											<TableCell className="py-2 text-sm text-right">
-												{item.size}
+												--
 											</TableCell>
 											<TableCell className="py-2 text-sm">
-												{item.modified}
+												{item.modified.getDate()}
 											</TableCell>
 										</TableRow>
 									))}

@@ -85,7 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 				session.user.setupStage = account?.setupState as number;
 				session.user.usid = account?.id as string;
 			}
-			console.log(session);
+			//console.log(session);
 			return session;
 		},
 	},
